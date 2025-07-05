@@ -47,6 +47,9 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.5257 0.1912 291.95);
+  --secondary: oklch(0.588 0.1863 299.69);
+  --tertiary: oklch(0.6352 0.185 304.77);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -119,4 +122,32 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.mouse-cursor-gradient-tracking {
+  position: relative;
+  overflow: hidden;
+}
+
+.mouse-cursor-gradient-tracking span {
+  position: relative;
+  pointer-events: none;
+}
+
+.mouse-cursor-gradient-tracking::before {
+  --size: 0;
+  content: '';
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(circle closest-side, rgb(211, 192, 255), transparent);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease;
+  pointer-events: none;
+}
+
+.mouse-cursor-gradient-tracking:hover::before {
+  --size: 200px;
 }
