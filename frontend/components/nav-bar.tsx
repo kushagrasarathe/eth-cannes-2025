@@ -1,6 +1,6 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectedButton } from "./mobile-header";
 import Link from "next/link";
 
 export function NavBar() {
@@ -11,7 +11,7 @@ export function NavBar() {
           <span className="font-bold">Zen Yield</span>
         </Link>
         <div className="flex flex-1 items-center justify-end">
-          <ConnectButton />
+          <ConnectedButton />
         </div>
       </div>
     </header>

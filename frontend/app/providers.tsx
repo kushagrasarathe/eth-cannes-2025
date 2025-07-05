@@ -6,7 +6,8 @@ import {
   getDefaultConfig,
   darkTheme,
 } from "@rainbow-me/rainbowkit";
-import { createConfig, http, WagmiProvider } from "wagmi";
+// import { createConfig, http, WagmiProvider } from "wagmi";
+import { createConfig, WagmiProvider } from "@privy-io/wagmi";
 import {
   mainnet,
   polygon,
@@ -18,15 +19,20 @@ import {
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { porto } from "porto/wagmi";
+import { PrivyProvider } from "@privy-io/react-auth";
+import { privyConfig } from "@/hooks/privy";
+import { http } from "viem";
 // import { config } from "@/config";
+import { AuthGuard } from "@/components/auth-guard";
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
 
-const config = getDefaultConfig({
-  appName: "Zen Yield",
-  projectId,
-  chains: [mainnet, polygon, optimism, arbitrum, base],
+const config = createConfig({
+  chains: [base],
   ssr: true,
+  transports: {
+    [base.id]: http(),
+  },
 });
 
 const queryClient = new QueryClient();
@@ -37,10 +43,20 @@ const PRIVY_APP_SECRET = process.env.NEXT_PUBLIC_PRIVY_APP_SECRET!;
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+    <PrivyProvider
+      appId={PRIVY_APP_ID}
+      clientId={PRIVY_APP_CLIENT_ID}
+      config={privyConfig}
+    >
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
+        <WagmiProvider config={config as any}>
+          <RainbowKitProvider theme={darkTheme()}>
+            {/* <AuthGuard> */}
+              {children}
+            {/* </AuthGuard> */}
+          </RainbowKitProvider>
+      </WagmiProvider>
       </QueryClientProvider>
-    </WagmiProvider>
+    </PrivyProvider>
   );
 }

@@ -11,7 +11,9 @@ import { createClient } from "viem";
 import { http } from "viem";
 import { Chains } from "porto";
 import { Key, ServerActions } from "porto/viem";
-import { CustomConnectButton } from "@/components/custom-connect-button";
+import { ConnectedButton } from "@/components/mobile-header";
+// import { CustomConnectButton } from "@/components/custom-connect-button";
+import { CustomConnectButton } from "@/components/just-connect-button";
 
 const balances = [{ token: "USDC", amount: "10,430", apy: "4.5" }];
 
@@ -50,7 +52,7 @@ export default function HomePage() {
           width={400}
           height={200}
         />
-        {/* 
+        
         <button
           onClick={async () => {
             const base = {
@@ -67,17 +69,26 @@ export default function HomePage() {
               transport: http(),
             });
 
+            const passkey = await Key.createWebAuthnP256({
+              label: "zenny-eth-cannes",
+            });
+
             const account = await ServerActions.createAccount(client, {
-              authorizeKeys: [Key.createSecp256k1()],
+              chain: base as any,
+              authorizeKeys: [passkey],
             });
             console.log(account);
+
+            if (connector) {
+              connect({ connector });
+            }
           }}
           type="button"
           // disabled={!connector}
           className="rounded-md w-fit border-2 border-dashed border-black bg-white px-6 cursor-pointer py-2.5 font-semibold uppercase text-black transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-2xl hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-md active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Get started
-        </button> */}
+        </button>
 
         <CustomConnectButton />
       </div>
@@ -102,7 +113,7 @@ export default function HomePage() {
         >
           Sign out
         </button> */}
-        <CustomConnectButton />
+        <ConnectedButton />
       </div>
 
       <div className="mt-16 space-y-3">
